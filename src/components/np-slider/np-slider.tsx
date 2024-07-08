@@ -7,32 +7,59 @@ import { ShadowDomHelper } from '../../utils/shadow-dom-helper';
   shadow: true,
 })
 export class NpSlider {
-  @Element() el;
-  // TypeScript function definitions
-  controlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
-    const [from, to] = this.getParsed(fromInput, toInput);
-    this.fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
-    if (from > to) {
-      fromSlider.value = to.toString();
-      fromInput.value = to.toString();
+  @Element() npElement;
+
+  _value: number | number[] = 0;
+  @Prop({ attribute: 'value' }) value: number | number[] = [10];
+  @Watch('value') watchValue(newValue: number | number[]) {
+    if (!this.range) {
+      this._value = typeof newValue === 'number' ? newValue : newValue[0];
     } else {
-      fromSlider.value = from.toString();
+      this._value = newValue.constructor === Array && newValue.length < 3 && newValue.length > 0 ? (newValue.length > 1 ? newValue : [0, newValue[0]]) : [0, 0];
     }
+    console.log('%csrccomponents\np-slider\np-slider.tsx:20 this._value', 'color: #007acc;', this._value);
   }
 
-  controlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
-    const [from, to] = this.getParsed(fromInput, toInput);
-    this.fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
-    this.setToggleAccessible(toInput);
-    if (from <= to) {
-      toSlider.value = to.toString();
-      toInput.value = to.toString();
-    } else {
-      toInput.value = from.toString();
-    }
+  @Prop({ attribute: 'disabled' }) disabled: boolean = false;
+
+  @Prop() min: number = 0;
+
+  @Prop() max: number = 100;
+
+  @Prop() orientation: string = 'horizontal';
+
+  @Prop() step: number;
+
+  @Prop() range: boolean = true;
+
+  @Prop() sliderStyle: any;
+
+  @Prop() styleClass: string;
+
+  @Prop() ariaLabelledBy: string;
+
+  @Prop() tabindex: number = 0;
+
+  @Event() onChange: EventEmitter<any>;
+
+  @Event() onSlideEnd: EventEmitter<any>;
+
+  componentWillLoad() {
+    this.watchValue(this.value);
   }
 
-  controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement): void {
+  componentDidLoad() {
+    const fromSlider = ShadowDomHelper.searchElement(this.npElement, '#fromSlider') as HTMLInputElement;
+    const toSlider = ShadowDomHelper.searchElement(this.npElement, '#toSlider') as HTMLInputElement;
+    this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
+    this.setToggleAccessible(toSlider);
+
+    fromSlider.oninput = () => this.controlFromSlider(fromSlider, toSlider);
+    toSlider.oninput = () => this.controlToSlider(fromSlider, toSlider);
+  }
+
+  controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement) {
+    if (this.disabled) return;
     const [from, to] = this.getParsed(fromSlider, toSlider);
     this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
     if (from > to) {
@@ -40,7 +67,8 @@ export class NpSlider {
     }
   }
 
-  controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement): void {
+  controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement) {
+    if (this.disabled) return;
     const [from, to] = this.getParsed(fromSlider, toSlider);
     this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
     this.setToggleAccessible(toSlider);
@@ -58,7 +86,7 @@ export class NpSlider {
   }
 
   fillSlider(from: HTMLInputElement, to: HTMLInputElement, sliderColor: string, rangeColor: string, controlSlider: HTMLInputElement) {
-    console.log('%clibrary-coresrccomponents\np-slider\np-slider.tsx:64 to', 'color: #007acc;', to);
+    if (this.disabled) return;
     const rangeDistance = parseInt(to.max) - parseInt(to.min);
     const fromPosition = parseInt(from.value) - parseInt(to.min);
     const toPosition = parseInt(to.value) - parseInt(to.min);
@@ -73,7 +101,8 @@ export class NpSlider {
   }
 
   setToggleAccessible(currentTarget: HTMLInputElement): void {
-    const toSlider = ShadowDomHelper.searchElement(this.el, '#toSlider') as HTMLInputElement;
+    if (this.disabled) return;
+    const toSlider = ShadowDomHelper.searchElement(this.npElement, '#toSlider') as HTMLInputElement;
     if (Number(currentTarget.value) <= 0) {
       toSlider.style.zIndex = '2';
     } else {
@@ -83,24 +112,14 @@ export class NpSlider {
 
   // Initial setup
 
-  componentDidLoad() {
-    const fromSlider = ShadowDomHelper.searchElement(this.el, '#fromSlider') as HTMLInputElement;
-    const toSlider = ShadowDomHelper.searchElement(this.el, '#toSlider') as HTMLInputElement;
-    this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
-    this.setToggleAccessible(toSlider);
-
-    fromSlider.oninput = () => this.controlFromSlider(fromSlider, toSlider);
-    toSlider.oninput = () => this.controlToSlider(fromSlider, toSlider);
-  }
-
   //#endregion Functions
   //#region RENDER
   render() {
     return (
       <div class="range_container">
         <div class="sliders_control">
-          <input id="fromSlider" type="range" defaultValue="50" min="0" max="100" />
-          {/* <input id="toSlider" type="range" defaultValue="30" min="0" max="100" /> */}
+          <input disabled={this.disabled} style={{ visibility: 'hidden' }} id="fromSlider" type="range" defaultValue="0" min="0" max="100" />
+          <input disabled={this.disabled} id="toSlider" type="range" defaultValue="30" min="0" max="100" />
         </div>
       </div>
     );

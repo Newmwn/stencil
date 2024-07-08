@@ -6,32 +6,98 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface ComponentsTest {
+    }
     interface FluidLevel {
     }
+    interface NpSlider {
+        "ariaLabelledBy": string;
+        "disabled": boolean;
+        "max": number;
+        "min": number;
+        "orientation": string;
+        "range": boolean;
+        "sliderStyle": any;
+        "step": number;
+        "styleClass": string;
+        "tabindex": number;
+        "value": number | number[];
+    }
+}
+export interface NpSliderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLNpSliderElement;
 }
 declare global {
+    interface HTMLComponentsTestElement extends Components.ComponentsTest, HTMLStencilElement {
+    }
+    var HTMLComponentsTestElement: {
+        prototype: HTMLComponentsTestElement;
+        new (): HTMLComponentsTestElement;
+    };
     interface HTMLFluidLevelElement extends Components.FluidLevel, HTMLStencilElement {
     }
     var HTMLFluidLevelElement: {
         prototype: HTMLFluidLevelElement;
         new (): HTMLFluidLevelElement;
     };
+    interface HTMLNpSliderElementEventMap {
+        "onChange": any;
+        "onSlideEnd": any;
+    }
+    interface HTMLNpSliderElement extends Components.NpSlider, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLNpSliderElementEventMap>(type: K, listener: (this: HTMLNpSliderElement, ev: NpSliderCustomEvent<HTMLNpSliderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLNpSliderElementEventMap>(type: K, listener: (this: HTMLNpSliderElement, ev: NpSliderCustomEvent<HTMLNpSliderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLNpSliderElement: {
+        prototype: HTMLNpSliderElement;
+        new (): HTMLNpSliderElement;
+    };
     interface HTMLElementTagNameMap {
+        "components-test": HTMLComponentsTestElement;
         "fluid-level": HTMLFluidLevelElement;
+        "np-slider": HTMLNpSliderElement;
     }
 }
 declare namespace LocalJSX {
+    interface ComponentsTest {
+    }
     interface FluidLevel {
     }
+    interface NpSlider {
+        "ariaLabelledBy"?: string;
+        "disabled"?: boolean;
+        "max"?: number;
+        "min"?: number;
+        "onOnChange"?: (event: NpSliderCustomEvent<any>) => void;
+        "onOnSlideEnd"?: (event: NpSliderCustomEvent<any>) => void;
+        "orientation"?: string;
+        "range"?: boolean;
+        "sliderStyle"?: any;
+        "step"?: number;
+        "styleClass"?: string;
+        "tabindex"?: number;
+        "value"?: number | number[];
+    }
     interface IntrinsicElements {
+        "components-test": ComponentsTest;
         "fluid-level": FluidLevel;
+        "np-slider": NpSlider;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "components-test": LocalJSX.ComponentsTest & JSXBase.HTMLAttributes<HTMLComponentsTestElement>;
             "fluid-level": LocalJSX.FluidLevel & JSXBase.HTMLAttributes<HTMLFluidLevelElement>;
+            "np-slider": LocalJSX.NpSlider & JSXBase.HTMLAttributes<HTMLNpSliderElement>;
         }
     }
 }
