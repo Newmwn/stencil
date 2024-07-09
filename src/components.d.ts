@@ -42,8 +42,8 @@ declare global {
         new (): HTMLFluidLevelElement;
     };
     interface HTMLNpSliderElementEventMap {
-        "onChange": any;
-        "onSlideEnd": any;
+        "changeEvent": any;
+        "slideEndEvent": any;
     }
     interface HTMLNpSliderElement extends Components.NpSlider, HTMLStencilElement {
         addEventListener<K extends keyof HTMLNpSliderElementEventMap>(type: K, listener: (this: HTMLNpSliderElement, ev: NpSliderCustomEvent<HTMLNpSliderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -75,8 +75,8 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "max"?: number;
         "min"?: number;
-        "onOnChange"?: (event: NpSliderCustomEvent<any>) => void;
-        "onOnSlideEnd"?: (event: NpSliderCustomEvent<any>) => void;
+        "onChangeEvent"?: (event: NpSliderCustomEvent<any>) => void;
+        "onSlideEndEvent"?: (event: NpSliderCustomEvent<any>) => void;
         "orientation"?: string;
         "range"?: boolean;
         "sliderStyle"?: any;

@@ -10,14 +10,28 @@ export class NpSlider {
   fromHandler: HTMLInputElement;
   toHandler: HTMLInputElement;
 
-  _value: number | number[] = 0;
-  @Prop({ attribute: 'value' }) value: number | number[] = [10, 30];
+  oldValue = [];
+
+  @State() _value: number | number[] = 0;
+  @Prop({ attribute: 'value' }) value: number | number[] = 0;
   @Watch('value') watchValue(newValue: number | number[]) {
     if (!this.range) {
       this._value = typeof newValue === 'number' ? newValue : newValue[0];
     } else {
       this._value = newValue.constructor === Array && newValue.length < 3 && newValue.length > 0 ? (newValue.length > 1 ? newValue : [0, newValue[0]]) : [0, 0];
+      if (this._value[0] !== this.oldValue[0] && this._value[0] >= this._value[1]) {
+        this._value[1] = this._value[0];
+      }
+      if (this._value[1] !== this.oldValue[1] && this._value[1] <= this._value[0]) {
+        this._value[0] = this._value[1];
+      }
     }
+    setTimeout(() => {
+      this.oldValue = JSON.parse(JSON.stringify(this._value));
+      this.fillSlider(this.fromHandler, this.toHandler, '#C6C6C6', '#25daa5', this.toHandler);
+    });
+
+    this.changeEvent.emit(this._value);
   }
 
   @Prop({ attribute: 'disabled' }) disabled: boolean = false;
@@ -28,7 +42,7 @@ export class NpSlider {
 
   @Prop({ attribute: 'orientation' }) orientation: string = 'horizontal';
 
-  @Prop({ attribute: 'step' }) step: number;
+  @Prop({ attribute: 'step' }) step: number = 1;
 
   @Prop({ attribute: 'range' }) range: boolean = true;
 
@@ -50,30 +64,33 @@ export class NpSlider {
 
   componentDidLoad() {
     this.fillSlider(this.fromHandler, this.toHandler, '#C6C6C6', '#25daa5', this.toHandler);
-    this.setToggleAccessible(this.toHandler);
   }
 
-  controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement) {
+  controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, event) {
+    // console.log('%csrccomponents\np-slider\np-slider.tsx:69 event', 'color: #007acc;', event);
     if (this.disabled) return;
     const [from, to] = this.getParsed(fromSlider, toSlider);
-    this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
     if (from > to) {
-      fromSlider.value = to.toString();
+      this._value = !this.range ? from : [to, from];
+      this.fillSlider(toSlider, fromSlider, '#C6C6C6', '#25daa5', toSlider);
+    } else {
+      this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
+      this._value = !this.range ? from : [from, to];
     }
-    this._value = !this.range ? from : [from, to];
+    console.log('%csrccomponents\np-slider\np-slider.tsx:80 this._Value', 'color: #007acc;', this._value);
+    this.changeEvent.emit(this._value);
   }
 
   controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement) {
     if (this.disabled) return;
     const [from, to] = this.getParsed(fromSlider, toSlider);
-    this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
-    this.setToggleAccessible(toSlider);
     if (from <= to) {
-      toSlider.value = to.toString();
+      this._value = !this.range ? to : [from, to];
+      this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
     } else {
-      toSlider.value = from.toString();
+      this.fillSlider(toSlider, fromSlider, '#C6C6C6', '#25daa5', toSlider);
+      this._value = !this.range ? to : [to, from];
     }
-    this._value = !this.range ? to : [from, to];
     this.changeEvent.emit(this._value);
   }
 
@@ -98,15 +115,6 @@ export class NpSlider {
     ${sliderColor} 100%)`;
   }
 
-  setToggleAccessible(currentTarget: HTMLInputElement): void {
-    if (this.disabled) return;
-    if (Number(currentTarget.value) <= 0) {
-      this.toHandler.style.zIndex = '2';
-    } else {
-      this.toHandler.style.zIndex = '0';
-    }
-  }
-
   // Initial setup
 
   //#endregion Functions
@@ -117,23 +125,26 @@ export class NpSlider {
         <div class="slider-container--slider-control">
           <input
             ref={fromHandlerRef => (this.fromHandler = fromHandlerRef)}
-            class="slider-container--slider-control__fromHandler"
-            style={{ display: !this.range ? 'none' : 'unset' }}
+            id="fromHandler"
+            style={{ display: !this.range ? 'none' : 'unset', pointerEvents: 'none' }}
             disabled={this.disabled}
             type="range"
-            defaultValue={!this.range ? 0 : this._value[0]}
             min={this.min}
             max={this.max}
-            onInput={() => this.controlFromSlider(this.fromHandler, this.toHandler)}
+            step={this.step}
+            value={!this.range ? 0 : this._value[0]}
+            onInput={event => this.controlFromSlider(this.fromHandler, this.toHandler, event)}
           />
           <input
             ref={toHandlerRef => (this.toHandler = toHandlerRef)}
             disabled={this.disabled}
+            style={{ pointerEvents: 'none' }}
             type="range"
-            defaultValue={!this.range ? this._value : this._value[1]}
             min={this.min}
             max={this.max}
-            onInput={() => this.controlToSlider(this.fromHandler, this.toHandler)}
+            step={this.step}
+            value={!this.range ? this._value : this._value[1]}
+            onInput={event => this.controlToSlider(this.fromHandler, this.toHandler)}
           />
         </div>
       </div>
