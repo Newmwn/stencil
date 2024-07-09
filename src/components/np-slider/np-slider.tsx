@@ -44,7 +44,7 @@ export class NpSlider {
 
   @Prop({ attribute: 'step' }) step: number = 1;
 
-  @Prop({ attribute: 'range' }) range: boolean = true;
+  @Prop({ attribute: 'range' }) range: boolean = false;
 
   @Prop() sliderStyle: any;
 
@@ -66,8 +66,7 @@ export class NpSlider {
     this.fillSlider(this.fromHandler, this.toHandler, '#C6C6C6', '#25daa5', this.toHandler);
   }
 
-  controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, event) {
-    // console.log('%csrccomponents\np-slider\np-slider.tsx:69 event', 'color: #007acc;', event);
+  controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement) {
     if (this.disabled) return;
     const [from, to] = this.getParsed(fromSlider, toSlider);
     if (from > to) {
@@ -77,11 +76,10 @@ export class NpSlider {
       this.fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
       this._value = !this.range ? from : [from, to];
     }
-    console.log('%csrccomponents\np-slider\np-slider.tsx:80 this._Value', 'color: #007acc;', this._value);
     this.changeEvent.emit(this._value);
   }
 
-  controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement) {
+  controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, event) {
     if (this.disabled) return;
     const [from, to] = this.getParsed(fromSlider, toSlider);
     if (from <= to) {
@@ -126,25 +124,26 @@ export class NpSlider {
           <input
             ref={fromHandlerRef => (this.fromHandler = fromHandlerRef)}
             id="fromHandler"
-            style={{ display: !this.range ? 'none' : 'unset', pointerEvents: 'none' }}
+            style={{ display: !this.range ? 'none' : 'unset', pointerEvents: this.range ? 'none' : 'all' }}
             disabled={this.disabled}
             type="range"
             min={this.min}
             max={this.max}
             step={this.step}
             value={!this.range ? 0 : this._value[0]}
-            onInput={event => this.controlFromSlider(this.fromHandler, this.toHandler, event)}
+            onInput={event => this.controlFromSlider(this.fromHandler, this.toHandler)}
           />
           <input
             ref={toHandlerRef => (this.toHandler = toHandlerRef)}
             disabled={this.disabled}
-            style={{ pointerEvents: 'none' }}
+            style={{ pointerEvents: this.range ? 'none' : 'all' }}
             type="range"
             min={this.min}
             max={this.max}
             step={this.step}
             value={!this.range ? this._value : this._value[1]}
-            onInput={event => this.controlToSlider(this.fromHandler, this.toHandler)}
+            onInput={event => this.controlToSlider(this.fromHandler, this.toHandler, event)}
+            onChange={() => this.slideEndEvent.emit(this._value)}
           />
         </div>
       </div>

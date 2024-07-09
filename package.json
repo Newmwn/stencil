@@ -43,6 +43,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@niup/devkit": "^0.0.8",
     "@stencil/sass": "^3.0.10"
   }
 }

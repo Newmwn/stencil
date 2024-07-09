@@ -9,18 +9,19 @@ export class ComponentsLibraryCoreTest {
   connectedCallback() {}
 
   @State() value = [0, 30];
-  @State() newValue = [];
-  from;
-  to;
+  @State() from;
+  @State() to;
   componentDidLoad() {}
   componentWillLoad() {}
 
   onChangeEvent(event) {
-    console.log('%csrccomponentscomponents-testcomponents-test.tsx:18 event.detail', 'color: #007acc;', event.detail);
-    // this.to.value = event.detail;
-    // this.from.value = event.detail[0];
-    // this.to.value = event.detail[1];
-    this.newValue = event.detail;
+    console.log('%csrccomponentscomponents-testcomponents-test.tsx:18 event', 'color: #007acc;', event);
+    this.from = event.detail[0];
+    this.to = event.detail[1];
+  }
+
+  onInputChange() {
+    this.value = [this.from, this.to];
   }
   render() {
     return (
@@ -30,28 +31,24 @@ export class ComponentsLibraryCoreTest {
           onChangeEvent={event => {
             this.onChangeEvent(event);
           }}
+          onSlideEndEvent={event => {
+            console.log('%csrccomponentscomponents-testcomponents-test.tsx:33 event', 'color: #007acc;', event);
+          }}
         ></np-slider>
-        {console.log('%csrccomponentscomponents-testcomponents-test.tsx:32 this.from.value', 'color: #007acc;', this.from?.value)}
         <input
-          ref={el => (this.from = el)}
           type="number"
-          value={this.newValue[0]}
+          value={this.from}
           onInput={event => {
-            this.value[0] = Number((event.composedPath()[0] as any).value);
-            this.value = [...this.value];
+            this.from = Number((event.composedPath()[0] as any).value);
+            this.onInputChange();
           }}
         />
         <input
-          ref={el => (this.to = el)}
           type="number"
-          // onInput={event => {
-          //   this.value[0] = Number((event.composedPath()[0] as any).value);
-          //   this.value = [...this.value];
-          // }}
-          value={this.newValue[1]}
+          value={this.to}
           onInput={event => {
-            this.value[1] = (event.composedPath()[0] as any).value;
-            this.value = [...this.value];
+            this.to = Number((event.composedPath()[0] as any).value);
+            this.onInputChange();
           }}
         />
       </div>
