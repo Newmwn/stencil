@@ -44,7 +44,7 @@ export class NpSlider {
 
   @Prop({ attribute: 'step' }) step: number = 1;
 
-  @Prop({ attribute: 'range' }) range: boolean = false;
+  @Prop({ attribute: 'range' }) range: boolean = true;
 
   @Prop() sliderStyle: any;
 
@@ -132,6 +132,7 @@ export class NpSlider {
             step={this.step}
             value={!this.range ? 0 : this._value[0]}
             onInput={event => this.controlFromSlider(this.fromHandler, this.toHandler)}
+            onChange={() => this.slideEndEvent.emit(this._value)}
           />
           <input
             ref={toHandlerRef => (this.toHandler = toHandlerRef)}
