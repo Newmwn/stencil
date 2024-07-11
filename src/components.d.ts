@@ -5,6 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Color } from "./components/story-test/color.enum";
+export { Color } from "./components/story-test/color.enum";
 export namespace Components {
     interface ComponentsTest {
     }
@@ -23,10 +25,29 @@ export namespace Components {
         "tabindex": number;
         "value": number | number[];
     }
+    interface StoryTest {
+        /**
+          * Color of the component
+          * @name Color
+          * @type {Color}
+          * @default Red
+         */
+        "color": Color;
+        /**
+          * Text to display
+          * @name Text
+          * @type {string}
+         */
+        "text": string;
+    }
 }
 export interface NpSliderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLNpSliderElement;
+}
+export interface StoryTestCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStoryTestElement;
 }
 declare global {
     interface HTMLComponentsTestElement extends Components.ComponentsTest, HTMLStencilElement {
@@ -59,10 +80,28 @@ declare global {
         prototype: HTMLNpSliderElement;
         new (): HTMLNpSliderElement;
     };
+    interface HTMLStoryTestElementEventMap {
+        "clickEventBy": any;
+    }
+    interface HTMLStoryTestElement extends Components.StoryTest, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLStoryTestElementEventMap>(type: K, listener: (this: HTMLStoryTestElement, ev: StoryTestCustomEvent<HTMLStoryTestElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLStoryTestElementEventMap>(type: K, listener: (this: HTMLStoryTestElement, ev: StoryTestCustomEvent<HTMLStoryTestElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLStoryTestElement: {
+        prototype: HTMLStoryTestElement;
+        new (): HTMLStoryTestElement;
+    };
     interface HTMLElementTagNameMap {
         "components-test": HTMLComponentsTestElement;
         "fluid-level": HTMLFluidLevelElement;
         "np-slider": HTMLNpSliderElement;
+        "story-test": HTMLStoryTestElement;
     }
 }
 declare namespace LocalJSX {
@@ -85,10 +124,30 @@ declare namespace LocalJSX {
         "tabindex"?: number;
         "value"?: number | number[];
     }
+    interface StoryTest {
+        /**
+          * Color of the component
+          * @name Color
+          * @type {Color}
+          * @default Red
+         */
+        "color"?: Color;
+        /**
+          * Event emitted by the component when clicked
+         */
+        "onClickEventBy"?: (event: StoryTestCustomEvent<any>) => void;
+        /**
+          * Text to display
+          * @name Text
+          * @type {string}
+         */
+        "text"?: string;
+    }
     interface IntrinsicElements {
         "components-test": ComponentsTest;
         "fluid-level": FluidLevel;
         "np-slider": NpSlider;
+        "story-test": StoryTest;
     }
 }
 export { LocalJSX as JSX };
@@ -98,6 +157,7 @@ declare module "@stencil/core" {
             "components-test": LocalJSX.ComponentsTest & JSXBase.HTMLAttributes<HTMLComponentsTestElement>;
             "fluid-level": LocalJSX.FluidLevel & JSXBase.HTMLAttributes<HTMLFluidLevelElement>;
             "np-slider": LocalJSX.NpSlider & JSXBase.HTMLAttributes<HTMLNpSliderElement>;
+            "story-test": LocalJSX.StoryTest & JSXBase.HTMLAttributes<HTMLStoryTestElement>;
         }
     }
 }

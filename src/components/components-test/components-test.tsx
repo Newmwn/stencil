@@ -1,4 +1,5 @@
-import { Component, h, State } from '@stencil/core';
+import { Component, h } from '@stencil/core';
+import { Color } from '../story-test/color.enum';
 
 @Component({
   tag: 'components-test',
@@ -6,51 +7,11 @@ import { Component, h, State } from '@stencil/core';
   shadow: true,
 })
 export class ComponentsLibraryCoreTest {
-  connectedCallback() {}
-
-  @State() value = [0, 30];
-  @State() from;
-  @State() to;
-  componentDidLoad() {}
-  componentWillLoad() {}
-
-  onChangeEvent(event) {
-    console.log('%csrccomponentscomponents-testcomponents-test.tsx:18 event', 'color: #007acc;', event);
-    this.from = event.detail[0];
-    this.to = event.detail[1];
-  }
-
-  onInputChange() {
-    this.value = [this.from, this.to];
-  }
+  
   render() {
     return (
       <div>
-        <np-slider
-          value={this.value}
-          onChangeEvent={event => {
-            this.onChangeEvent(event);
-          }}
-          onSlideEndEvent={event => {
-            console.log('%csrccomponentscomponents-testcomponents-test.tsx:33 event', 'color: #007acc;', event);
-          }}
-        ></np-slider>
-        <input
-          type="number"
-          value={this.from}
-          onInput={event => {
-            this.from = Number((event.composedPath()[0] as any).value);
-            this.onInputChange();
-          }}
-        />
-        <input
-          type="number"
-          value={this.to}
-          onInput={event => {
-            this.to = Number((event.composedPath()[0] as any).value);
-            this.onInputChange();
-          }}
-        />
+        <story-test color={Color.Orange} text="Hello World" onClickEventBy={(event)=>console.log(event.detail)}></story-test>
       </div>
     );
   }

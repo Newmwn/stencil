@@ -79,7 +79,7 @@ export class NpSlider {
     this.changeEvent.emit(this._value);
   }
 
-  controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, event) {
+  controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement) {
     if (this.disabled) return;
     const [from, to] = this.getParsed(fromSlider, toSlider);
     if (from <= to) {
@@ -131,7 +131,7 @@ export class NpSlider {
             max={this.max}
             step={this.step}
             value={!this.range ? 0 : this._value[0]}
-            onInput={event => this.controlFromSlider(this.fromHandler, this.toHandler)}
+            onInput={() => this.controlFromSlider(this.fromHandler, this.toHandler)}
             onChange={() => this.slideEndEvent.emit(this._value)}
           />
           <input
@@ -143,7 +143,7 @@ export class NpSlider {
             max={this.max}
             step={this.step}
             value={!this.range ? this._value : this._value[1]}
-            onInput={event => this.controlToSlider(this.fromHandler, this.toHandler, event)}
+            onInput={() => this.controlToSlider(this.fromHandler, this.toHandler)}
             onChange={() => this.slideEndEvent.emit(this._value)}
           />
         </div>

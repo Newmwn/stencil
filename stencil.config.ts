@@ -14,6 +14,10 @@ export const config: Config = {
       externalRuntime: false,
     },
     {
+      type: 'docs-json',
+      file: './.storybook/docs.json',
+    },
+    {
       type: 'docs-readme',
     },
     {
