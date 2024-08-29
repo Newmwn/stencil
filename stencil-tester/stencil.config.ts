@@ -1,8 +1,7 @@
 import { Config } from '@stencil/core';
-import { sass } from '@stencil/sass';
 
 export const config: Config = {
-  namespace: 'fluid-level-graph',
+  namespace: 'stencil-tester',
   outputTargets: [
     {
       type: 'dist',
@@ -12,10 +11,6 @@ export const config: Config = {
       type: 'dist-custom-elements',
       customElementsExportBehavior: 'auto-define-custom-elements',
       externalRuntime: false,
-    },
-    {
-      type: 'docs-json',
-      file: './.storybook/docs.json',
     },
     {
       type: 'docs-readme',
@@ -28,7 +23,4 @@ export const config: Config = {
   testing: {
     browserHeadless: "new",
   },
-  plugins: [
-    sass()
-  ]
 };
