@@ -1,6 +1,6 @@
 import { fn } from '@storybook/test';
 import { createSTest } from './story-test';
-import {Color} from '../color.enum'
+import { Color } from '../color.enum';
 import { DocsHelper } from '../../../../.storybook/docs-helper';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
@@ -28,6 +28,6 @@ export default {
 export const Test1 = {
   args: {
     text: 'Test1',
-    color: Color.Orange
+    color: Color.Orange,
   },
 };
