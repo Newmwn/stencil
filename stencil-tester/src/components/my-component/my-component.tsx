@@ -30,8 +30,8 @@ export class MyComponent {
     return this.array.map((el) => {
       return (
         <div style={{ width: '100px', height: '100px', border: 'solid 1px' }}>
+          {el.label}
           <tool-tip text={el.tot}></tool-tip>
-          <div >{el.label}</div>
         </div>
       );
     })
