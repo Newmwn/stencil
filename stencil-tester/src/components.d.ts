@@ -7,18 +7,19 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface MyComponent {
+    }
+    interface NpColorSample {
         /**
-          * The first name
+          * Base color for the sphere
          */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+        "color": string;
+    }
+    interface TaskManager {
+    }
+    interface TemplateTest {
+        "arr": any;
+    }
+    interface ThreeComponent {
     }
     interface ToolTip {
         "text": any;
@@ -31,6 +32,30 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLNpColorSampleElement extends Components.NpColorSample, HTMLStencilElement {
+    }
+    var HTMLNpColorSampleElement: {
+        prototype: HTMLNpColorSampleElement;
+        new (): HTMLNpColorSampleElement;
+    };
+    interface HTMLTaskManagerElement extends Components.TaskManager, HTMLStencilElement {
+    }
+    var HTMLTaskManagerElement: {
+        prototype: HTMLTaskManagerElement;
+        new (): HTMLTaskManagerElement;
+    };
+    interface HTMLTemplateTestElement extends Components.TemplateTest, HTMLStencilElement {
+    }
+    var HTMLTemplateTestElement: {
+        prototype: HTMLTemplateTestElement;
+        new (): HTMLTemplateTestElement;
+    };
+    interface HTMLThreeComponentElement extends Components.ThreeComponent, HTMLStencilElement {
+    }
+    var HTMLThreeComponentElement: {
+        prototype: HTMLThreeComponentElement;
+        new (): HTMLThreeComponentElement;
+    };
     interface HTMLToolTipElement extends Components.ToolTip, HTMLStencilElement {
     }
     var HTMLToolTipElement: {
@@ -39,29 +64,38 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "np-color-sample": HTMLNpColorSampleElement;
+        "task-manager": HTMLTaskManagerElement;
+        "template-test": HTMLTemplateTestElement;
+        "three-component": HTMLThreeComponentElement;
         "tool-tip": HTMLToolTipElement;
     }
 }
 declare namespace LocalJSX {
     interface MyComponent {
+    }
+    interface NpColorSample {
         /**
-          * The first name
+          * Base color for the sphere
          */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+        "color"?: string;
+    }
+    interface TaskManager {
+    }
+    interface TemplateTest {
+        "arr"?: any;
+    }
+    interface ThreeComponent {
     }
     interface ToolTip {
         "text"?: any;
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "np-color-sample": NpColorSample;
+        "task-manager": TaskManager;
+        "template-test": TemplateTest;
+        "three-component": ThreeComponent;
         "tool-tip": ToolTip;
     }
 }
@@ -70,6 +104,10 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "np-color-sample": LocalJSX.NpColorSample & JSXBase.HTMLAttributes<HTMLNpColorSampleElement>;
+            "task-manager": LocalJSX.TaskManager & JSXBase.HTMLAttributes<HTMLTaskManagerElement>;
+            "template-test": LocalJSX.TemplateTest & JSXBase.HTMLAttributes<HTMLTemplateTestElement>;
+            "three-component": LocalJSX.ThreeComponent & JSXBase.HTMLAttributes<HTMLThreeComponentElement>;
             "tool-tip": LocalJSX.ToolTip & JSXBase.HTMLAttributes<HTMLToolTipElement>;
         }
     }

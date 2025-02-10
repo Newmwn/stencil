@@ -1,0 +1,31 @@
+:host{
+  width: 100%;
+  height: 100%;
+}
+
+.sphere {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.7);
+  position: relative;
+  
+}
+
+.sphere-inner-shadow{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 5px 5px 50px rgba(0,0,0,0.2) inset;
+}
+
+.highlight {
+  position: absolute;
+  width: calc(90px * var(--wRatio));
+  height: calc(90px * var(--hRatio));
+  top: calc(10px * var(--hRatio));
+  left: calc(15px * var(--wRatio));
+  border-radius: 50%;
+  filter: blur(16px);
+}
