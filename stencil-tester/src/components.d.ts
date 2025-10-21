@@ -5,7 +5,14 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { ColumnConfig } from "./components/chart-table/chart-table";
+export { ColumnConfig } from "./components/chart-table/chart-table";
 export namespace Components {
+    interface DataTable {
+        "columns": ColumnConfig[];
+        "data": any[];
+        "showTotal": boolean;
+    }
     interface MyComponent {
     }
     interface NpColorSample {
@@ -26,6 +33,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLDataTableElement extends Components.DataTable, HTMLStencilElement {
+    }
+    var HTMLDataTableElement: {
+        prototype: HTMLDataTableElement;
+        new (): HTMLDataTableElement;
+    };
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
     var HTMLMyComponentElement: {
@@ -63,6 +76,7 @@ declare global {
         new (): HTMLToolTipElement;
     };
     interface HTMLElementTagNameMap {
+        "data-table": HTMLDataTableElement;
         "my-component": HTMLMyComponentElement;
         "np-color-sample": HTMLNpColorSampleElement;
         "task-manager": HTMLTaskManagerElement;
@@ -72,6 +86,11 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface DataTable {
+        "columns"?: ColumnConfig[];
+        "data"?: any[];
+        "showTotal"?: boolean;
+    }
     interface MyComponent {
     }
     interface NpColorSample {
@@ -91,6 +110,7 @@ declare namespace LocalJSX {
         "text"?: any;
     }
     interface IntrinsicElements {
+        "data-table": DataTable;
         "my-component": MyComponent;
         "np-color-sample": NpColorSample;
         "task-manager": TaskManager;
@@ -103,6 +123,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "data-table": LocalJSX.DataTable & JSXBase.HTMLAttributes<HTMLDataTableElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "np-color-sample": LocalJSX.NpColorSample & JSXBase.HTMLAttributes<HTMLNpColorSampleElement>;
             "task-manager": LocalJSX.TaskManager & JSXBase.HTMLAttributes<HTMLTaskManagerElement>;
